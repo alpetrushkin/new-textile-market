@@ -1,0 +1,64 @@
+.form__root {
+  position: relative;
+  display: inline-block;
+  min-height: 100%;
+  width: 100%;
+}
+
+.form__close {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 180px auto;
+
+  &__email {
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  &__title {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  &__input {
+    width: 400px;
+    padding: 10px 10px;
+    margin-bottom: 20px;
+    background: inherit;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+
+  &__eye {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-75%);
+    right: 10px;
+  }
+
+  &__btn {
+    display: inline-block;
+    margin-bottom: 16px;
+    width: 400px;
+    padding: 10px;
+    background: #21a3f6;
+    border: 0;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+}
