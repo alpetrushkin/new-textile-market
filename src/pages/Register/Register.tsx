@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom'
 import Login from '../../components/auth/loginPage/Login'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api'
+import { useForm } from 'react-hook-form'
+import { Box } from '@mui/material'
 
 const Register: React.FC = (): JSX.Element => {
    const location = useLocation()
@@ -15,11 +17,21 @@ const Register: React.FC = (): JSX.Element => {
    const [firstName, setFirstName] = useState('')
    const [lastName, setLastName] = useState('')
    const [phone, setPhone] = useState('')
+   const {
+      register,
+      formState: { errors },
+      handleSubmit,
+   } = useForm()
 
-   const handleSubmit = async (e: { preventDefault: () => void }) => {
+   console.log('ERRORS>>>', errors)
+   const handleSubmitForm = async (
+      data: any,
+      e: { preventDefault: () => void }
+   ) => {
+      console.log('DATA>>>', data)
       e.preventDefault()
       if (location.pathname === '/login') {
-         const userData = { email, password }
+         const userData = { email: data.email, password: data.password }
 
          const user = await api.postLogin(userData)
          navigate('/')
@@ -44,20 +56,33 @@ const Register: React.FC = (): JSX.Element => {
    }
 
    return (
-      <form onSubmit={handleSubmit}>
-         {location.pathname === '/login' ? (
-            <Login setEmail={setEmail} setPassword={setPassword} />
-         ) : location.pathname === '/register' ? (
-            <Auth
-               setEmail={setEmail}
-               setPassword={setPassword}
-               setRepeatPassword={setRepeatPassword}
-               setFirstName={setFirstName}
-               setLastName={setLastName}
-               setPhone={setPhone}
-            />
-         ) : null}
-      </form>
+      <div className="form__root">
+         <form className="form" onSubmit={handleSubmit(handleSubmitForm)}>
+            <Box
+               display="flex"
+               justifyContent="center"
+               alignItems="center"
+               flexDirection="column"
+               width={440}
+               margin="auto"
+               padding={5}
+               textAlign="center"
+            >
+               {location.pathname === '/login' ? (
+                  <Login register={register} errors={errors} />
+               ) : location.pathname === '/register' ? (
+                  <Auth
+                     setEmail={setEmail}
+                     setPassword={setPassword}
+                     setRepeatPassword={setRepeatPassword}
+                     setFirstName={setFirstName}
+                     setLastName={setLastName}
+                     setPhone={setPhone}
+                  />
+               ) : null}
+            </Box>
+         </form>
+      </div>
    )
 }
 
