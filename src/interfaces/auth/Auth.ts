@@ -8,7 +8,12 @@ export interface IPropsLogin<
    errors: FieldErrors<TFieldValues>
 }
 
-export interface IPropsRegister {
+export interface IPropsRegister<
+   TFieldValues extends FieldValues = FieldValues,
+   TContext = any
+> {
+   register: UseFormRegister<TFieldValues>
+   errors: FieldErrors<TFieldValues>
    setEmail: (value: string) => void
    setPassword: (value: string) => void
    setRepeatPassword: (value: string) => void
