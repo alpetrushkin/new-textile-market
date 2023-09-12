@@ -6,29 +6,28 @@ import { useNavigate } from 'react-router-dom'
 import api from '../../api'
 import { useForm } from 'react-hook-form'
 import { Box } from '@mui/material'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AuthSchema, LoginSchema } from '../../utils/yup'
+import { AppErrors } from '../../common/errors'
 
 const Register: React.FC = (): JSX.Element => {
    const location = useLocation()
    const navigate = useNavigate()
 
-   const [email, setEmail] = useState('')
-   const [password, setPassword] = useState('')
-   const [repeatPassword, setRepeatPassword] = useState('')
-   const [firstName, setFirstName] = useState('')
-   const [lastName, setLastName] = useState('')
-   const [phone, setPhone] = useState('')
    const {
       register,
       formState: { errors },
       handleSubmit,
-   } = useForm()
+   } = useForm({
+      resolver: yupResolver(
+         location.pathname === '/login' ? LoginSchema : AuthSchema
+      ),
+   })
 
-   console.log('ERRORS>>>', errors)
    const handleSubmitForm = async (
       data: any,
       e: { preventDefault: () => void }
    ) => {
-      console.log('DATA>>>', data)
       e.preventDefault()
       if (location.pathname === '/login') {
          const userData = { email: data.email, password: data.password }
@@ -37,20 +36,20 @@ const Register: React.FC = (): JSX.Element => {
          navigate('/')
          console.log(user.data)
       } else {
-         if (password === repeatPassword) {
+         if (data.password === data.confirmPassword) {
             const userData = {
-               email,
-               password,
-               firstName,
-               lastName,
-               phone,
+               email: data.email,
+               password: data.password,
+               firstName: data.firstName,
+               lastName: data.username,
+               phone: data.phone,
             }
 
             const newUser = await api.postAuth(userData)
             navigate('/')
             console.log(newUser.data)
          } else {
-            throw new Error('У вас не совпадают пароли')
+            throw new Error(AppErrors.PasswordDoNotMatch)
          }
       }
    }
@@ -71,14 +70,7 @@ const Register: React.FC = (): JSX.Element => {
                {location.pathname === '/login' ? (
                   <Login register={register} errors={errors} />
                ) : location.pathname === '/register' ? (
-                  <Auth
-                     setEmail={setEmail}
-                     setPassword={setPassword}
-                     setRepeatPassword={setRepeatPassword}
-                     setFirstName={setFirstName}
-                     setLastName={setLastName}
-                     setPhone={setPhone}
-                  />
+                  <Auth register={register} errors={errors} />
                ) : null}
             </Box>
          </form>

@@ -7,8 +7,6 @@ import { Button, TextField, Typography } from '@mui/material'
 const Login: React.FC<IPropsLogin> = (props: IPropsLogin): JSX.Element => {
    const { register, errors } = props
 
-   console.log('REGISTER>>>>', register.name)
-
    const navigate = useNavigate()
 
    return (
@@ -34,13 +32,11 @@ const Login: React.FC<IPropsLogin> = (props: IPropsLogin): JSX.Element => {
                fullWidth={true}
                label="Email"
                variant="outlined"
-               {...register('email', {
-                  required: 'Введите email',
-                  pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-               })}
+               {...register('email')}
             />
 
             <TextField
+               type="password"
                error={!!errors.password}
                helperText={errors.password ? `${errors.password.message}` : ''}
                color="primary"
@@ -48,10 +44,7 @@ const Login: React.FC<IPropsLogin> = (props: IPropsLogin): JSX.Element => {
                fullWidth={true}
                label="Password"
                variant="outlined"
-               {...register('password', {
-                  required: 'Введите пароль',
-                  minLength: 6,
-               })}
+               {...register('password')}
             />
 
             <Button
